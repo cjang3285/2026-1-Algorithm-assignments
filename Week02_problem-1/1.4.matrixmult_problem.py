@@ -6,10 +6,10 @@ def matrixmult(n, A, B):
     C = [[0] * n for _ in range(n)]
 
     # Standard matrix multiplication: C[i][j] = sum(A[i][k] * B[k][j])
-    for i in range(n):
-        for j in range(n):
-            for k in range(n):
-                C[i][j] += A[i][k] * B[k][j]
+    for i in range(n): # A의 0행부터 n-1행까지
+        for j in range(n): # B의 0열부터 n-1열까지
+            for k in range(n): # A의 i행과 B의 j열의 각각의 k번째 원소를 뽑아서
+                C[i][j] += A[i][k] * B[k][j] # 곱하고 결과를 C의 i행 j열에 누적하여 C[i][j]을 완성
 
     return C
     
