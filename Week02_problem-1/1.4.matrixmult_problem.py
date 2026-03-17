@@ -2,14 +2,17 @@
 # Week02-1.4.matrixmult_problem.py
 
 def matrixmult(n, A, B):
-    # n x n result matrix initialized with zeros
-    C = [[0] * n for _ in range(n)]
+    # n x n 결과행렬을 0으로 초기화
+    C = [[0] * n for _ in range(n)] # [0] * n가 하나의 행이 되고 
+                                    # for _ in range(n)로 n개의 행을 만들어서 
+                                    # n x n 크기의 2차원 리스트 C를 만든다. 
+                                    # 0으로 초기화되어 있다.
 
-    # Standard matrix multiplication: C[i][j] = sum(A[i][k] * B[k][j])
+    # 행렬곱셈: C[i][j] += A[i][k] * B[k][j])
     for i in range(n): # A의 0행부터 n-1행까지
         for j in range(n): # B의 0열부터 n-1열까지
             for k in range(n): # A의 i행과 B의 j열의 각각의 k번째 원소를 뽑아서
-                C[i][j] += A[i][k] * B[k][j] # 곱하고 결과를 C의 i행 j열에 누적하여 C[i][j]을 완성
+                C[i][j] += A[i][k] * B[k][j] # 곱하고 결과를 C의 i행 j열에 누적합하여 C[i][j]을 완성
 
     return C
     

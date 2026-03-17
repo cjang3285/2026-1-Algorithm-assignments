@@ -2,14 +2,18 @@
 # Week02-1.7.fib2_problem.py
 import time
 
-def fib2(n):
+def fib2(n): # n번째 피보나치 수를 구해주는 함수.
     if n == 0:
         return 0
     if n == 1:
         return 1
 
-    a, b = 0, 1
-    for _ in range(2, n + 1):
+    a, b = 0, 1 # 0, 1번째 피보나치 수 초기화.
+    for i in range(2, n + 1):     
+        # i로 이터레이션 시작 직전: a = F(i-2), b = F(i-1)
+        # i로 이터레이션 마치면: a = F(i-1), b = F(i)
+        # n로 이터레이션 시작 직전: a = F(n-2), b = F(n-1)
+        # n로 이터레이션 마치면: a = F(n-1), b = F(n)
         a, b = b, a + b
     return b
 
