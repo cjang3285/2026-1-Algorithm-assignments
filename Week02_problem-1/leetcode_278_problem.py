@@ -15,10 +15,14 @@ class Solution:
         while left < right:
             mid = left + (right - left) // 2
             if isBadVersion(mid):
+                # mid가 bad이므로 첫 bad 버전은 [left, mid] 구간에 있다.
                 right = mid
             else:
+                # mid가 good이므로 첫 bad 버전은 [mid + 1, right] 구간에 있다.
                 left = mid + 1
 
+        # 불량이 최소 1개 존재한다는 가정 하에, 첫 불량 버전은 항상 [left, right] 구간 안에 남도록 했다.
+        # left == right가 되면 후보가 1개만 남으므로 그 값이 정답이다.
         return left
     
 ########################################################################################
