@@ -16,13 +16,14 @@ class Solution:
     def mergeSort(self, nums: List[int]) -> List[int]:
         # merge를 타기 전까지는 재귀로 배열을 계속 쪼갤 뿐 아직 정렬이 안 됨
         if len(nums) <= 1:
-            # 기저케이스: 길이 1이면 그냥 반환 (아직 정렬이 아니라 그냥 1개 원소)
+            # 기저케이스: 길이 1이면 그냥 반환
             return nums
         mid = len(nums) // 2
         left_half = self.mergeSort(nums[:mid])   # 0 ~ mid-1
         right_half = self.mergeSort(nums[mid:])  # mid ~ end
-        # merge 통과 순간: 첫 merge에서는 길이 1 혹은 2짜리 조각들이 비교되면서 정렬 시작 <- 1개는 정렬된 상태로 볼 수 있으나 N이 홀수라 조각배열이 숫자 2개인 경우는 정렬 장담 어려움. 그러나 상관없이 merge 함수에서 정렬이 시작된다고 보면 됨.
-        # 그 이후부터는 항상 정렬된 배열들 끼리 merge에 인자로 들어감
+        # 길이가 1인 배열만 남을 때까지 내려가야 그제서야 merge 호출이 시작됨. 그전까지는 배열을 반으로 분할하는 것만 반복함. 
+        # merge 함수는 프로그램 실행 중 두 정렬된 배열만 입력으로 받게 된다. 처음 받는 길이 1짜리 배열도 정렬상태고 
+        # 이후 배열들은 이전에 merge를 거쳤으니 또한 정렬상태이기 때문이다.
         return self.merge(left_half, right_half)
 
     def merge(self, left: List[int], right: List[int]) -> List[int]:
