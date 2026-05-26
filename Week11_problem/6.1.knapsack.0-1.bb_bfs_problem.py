@@ -13,7 +13,13 @@ class Node:
         self.bound = 0
 
 
-def boundof(u, n, W, w, p):
+def boundof(u, n, W, w, p): # 현재 노드 u의 이익 상한을 계산해주는 함수
+    # 파라미터 의미
+    # u: 현재 상태 노드(현재까지의 level/weight/profit 정보를 가짐)
+    # n: 전체 아이템 개수
+    # W: 배낭의 최대 허용 무게
+    # w: 아이템 무게 배열(1번 인덱스부터 실제 아이템)
+    # p: 아이템 이익(가치) 배열(1번 인덱스부터 실제 아이템)
     # 이미 용량을 넘겼다면 유효한 해가 아니므로 상한을 0으로 반환
     if u.weight >= W:
         return 0
@@ -38,11 +44,16 @@ def boundof(u, n, W, w, p):
         if j <= n:
             profit_bound += (W - total_weight) * (p[j] / w[j])
 
-        # 이 노드의 총 이익 상한 반환
+        # "이 노드의 총 이익 상한" 반환
         return profit_bound
 
 
 def knapsack2(n, W, w, p):
+    # 파라미터 의미
+    # n: 전체 아이템 개수
+    # W: 배낭의 최대 허용 무게
+    # w: 아이템 무게 배열(편의상 w[0]=0, 실제 아이템은 w[1]~w[n])
+    # p: 아이템 이익 배열(편의상 p[0]=0, 실제 아이템은 p[1]~p[n])
     global count
     # BFS 탐색을 위한 큐
     queue = []  # Initialize Queue
@@ -69,7 +80,7 @@ def knapsack2(n, W, w, p):
                 maxprofit = u.profit
             # 왼쪽 자식의 상한 계산
             u.bound = boundof(u, n, W, w, p)
-            # 상한이 여전히 희망적이면 큐에 넣어 나중에 확장
+            # "상한이 여전히 희망적이면 큐에 넣어 나중에 확장"
             if u.bound > maxprofit:
                 queue.append(u)
 
@@ -77,11 +88,11 @@ def knapsack2(n, W, w, p):
             u = Node(v.level + 1, v.weight, v.profit)
             # 오른쪽 자식의 상한 계산
             u.bound = boundof(u, n, W, w, p)
-            # 상한이 현재 최적보다 크면 큐에 삽입
+            # "상한이 현재 최적보다 크면 큐에 삽입"
             if u.bound > maxprofit:
                 queue.append(u)
 
-    # 최종 최대 이익 반환
+    # "최종 최대 이익 반환"
     return maxprofit
 
 

@@ -16,11 +16,17 @@ class Node:
 
 
 def boundof(u, n, W, w, p):
+    # 파라미터 의미
+    # u: 현재 상태 노드(현재까지의 level/weight/profit 정보를 가짐)
+    # n: 전체 아이템 개수
+    # W: 배낭의 최대 허용 무게
+    # w: 아이템 무게 배열(1번 인덱스부터 실제 아이템)
+    # p: 아이템 이익(가치) 배열(1번 인덱스부터 실제 아이템)
     # 이미 용량을 넘겼다면 유효하지 않으므로 상한을 0으로 반환
     if u.weight >= W:
         return 0
     else:
-        # 상한 계산은 현재 누적 이익에서 시작
+        # "상한 계산은 현재 누적 이익에서 시작"
         profit_bound = u.profit
         # 다음으로 고려할 아이템 인덱스
         j = u.level + 1
@@ -36,15 +42,20 @@ def boundof(u, n, W, w, p):
             # 다음 아이템으로 이동
             j += 1
 
-        # 더 이상 통째로 못 담는 첫 아이템은 분수 배낭 방식으로 일부만 반영
+        # 더 이상 통째로 못 담는 첫 아이템은 "분수 배낭 방식"으로 일부만 반영
         if j <= n:
             profit_bound += (W - total_weight) * (p[j] / w[j])
 
-        # 이 노드에서 가능한 최대 총이익 상한 반환
+        # "이 노드에서 가능한 최대 총이익 상한" 반환
         return profit_bound
 
 
 def knapsack3(n, W, w, p):
+    # 파라미터 의미
+    # n: 전체 아이템 개수
+    # W: 배낭의 최대 허용 무게
+    # w: 아이템 무게 배열(편의상 w[0]=0, 실제 아이템은 w[1]~w[n])
+    # p: 아이템 이익 배열(편의상 p[0]=0, 실제 아이템은 p[1]~p[n])
     global count
     # Best-First Search를 위한 힙(우선순위 큐)
     heap = []  # Initialize Queue
@@ -67,16 +78,16 @@ def knapsack3(n, W, w, p):
         # 우선순위가 가장 높은 노드(= bound 최대)를 꺼냄
         _, _, v = heappop(heap)
 
-        # 상한이 현재 최적보다 크고 아직 마지막 레벨 전이면 자식 확장
+        # "상한이 현재 최적보다 크고 아직 마지막 레벨 전이면 자식 확장"
         if v.bound > maxprofit and v.level < n:
             # 왼쪽 자식: 다음 아이템을 선택한 경우
             u = Node(v.level + 1, v.weight + w[v.level + 1], v.profit + p[v.level + 1])
             # 유효한 무게이고 이익이 더 좋으면 최적 이익 갱신
             if u.weight <= W and u.profit > maxprofit:
                 maxprofit = u.profit
-            # 왼쪽 자식의 상한 계산
+            # 왼쪽 자식의 상한 계산, 상한 계산은 현재 누적 이익에서 시작하므로 u.profit이 포함되도록, 총 무게가 W를 넘으면 걸러내기 위함. 
             u.bound = boundof(u, n, W, w, p)
-            # 아직 희망이 있으면 힙에 삽입
+            # "상한이 현재 최적보다 크면 힙에 삽입"
             if u.bound > maxprofit:
                 heappush(heap, (-u.bound, counter, u))
                 # 삽입 후 카운터 증가
@@ -86,7 +97,7 @@ def knapsack3(n, W, w, p):
             u = Node(v.level + 1, v.weight, v.profit)
             # 오른쪽 자식의 상한 계산
             u.bound = boundof(u, n, W, w, p)
-            # 상한이 현재 최적보다 크면 힙에 삽입
+            # "상한이 현재 최적보다 크면 힙에 삽입"
             if u.bound > maxprofit:
                 heappush(heap, (-u.bound, counter, u))
                 # 삽입 후 카운터 증가
